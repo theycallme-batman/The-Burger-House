@@ -1,8 +1,8 @@
 import random
 import pandas as pd
 from faker import Faker
-from datetime import datetime
-
+from datetime import datetime , timedelta
+from time import sleep
 # Initialize Faker
 fake = Faker()
 Faker.seed(0)
@@ -14,17 +14,20 @@ Class - OrderDataGenerator
 """
 class OrderDataGenerator:
 
-    def __init__(self, country, num_orders):
+    def __init__(self, country):
         #initialize variable for generating data
         self.country = country
-        self.num_orders = num_orders
+        self.num_orders = 0
         self.orders_data = []
         self.order_items_data = []
 
-    def generate_order_data(self,maxItemID, itemDict): 
+    def generate_order_data(self,maxItemID, itemDict,num_orders): 
+        self.orders_data = []
+        self.order_items_data = []
+        self.num_orders = num_orders
         for _ in range(self.num_orders):
             order_id = fake.uuid4()
-            order_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            order_date = (datetime.now() + timedelta(minutes = random.randint(2, 10))).strftime('%Y-%m-%d %H:%M:%S')
 
             #customer_id = fake.uuid4()  --will be added in v2
             #customer_name = fake.name() --will be added in v2

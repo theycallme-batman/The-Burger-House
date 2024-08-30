@@ -8,16 +8,16 @@ Class - Kafka_Producer
     This class creates an object of order_data_generator , connect to kafka as a producer and sends the generated records to kafka server.
 """
 class Kafka_Producer:
-    def __init__(self,country, num_orders):
+    def __init__(self,country):
         #Initialiaze the Data Generator object
-        self.order_data_generator = OrderDataGenerator(country, num_orders)
+        self.order_data_generator = OrderDataGenerator(country)
         
-    def generateRecords(self):     
+    def generateRecords(self,num_orders):     
         #Get the initial item data information from the ./initdata 
         maxItemID, itemDict = self.order_data_generator.readItems()
 
         #Calling the generate_order_data for generating the orders
-        self.order_data_generator.generate_order_data(maxItemID, itemDict)
+        self.order_data_generator.generate_order_data(maxItemID, itemDict,num_orders)
 
         #Get DataFrames for orders and order items
         self.orders_df = self.order_data_generator.get_orders_dataframe()
