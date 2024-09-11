@@ -72,6 +72,7 @@ class OrderDataGenerator:
                 #'CustomerID': customer_id, --will be added in v2
                 #'CustomerName': customer_name, --will be added in v2
                 'StoreID': store_id,
+                'GlobalID': self.country[:3] + "-" + str(store_id),
                 'Country': self.country,
                 'PaymentMethod': payment_method,
                 'TotalAmount': total_order_amount,

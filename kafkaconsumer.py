@@ -10,33 +10,42 @@ Class - Kafka_Consumer
 """
 
 class Kafka_Consumer:
-    def __init__(self,topic,bootstrap_servers):
+    def __init__(self,topic,bootstrap_servers,groupID):
         #Connecting to Kafka as a consumer with the server,deserializer, and topic details
-        self.consumer = KafkaConsumer(topic,bootstrap_servers = bootstrap_servers,value_deserializer = lambda x: loads(x.decode('utf-8')))
+        self.consumer = KafkaConsumer(topic
+                                      ,bootstrap_servers = bootstrap_servers
+                                      ,value_deserializer = lambda x: loads(x.decode('utf-8'))
+                                      ,group_id = groupID
+                                      ,auto_offset_reset = "latest"
+                                      )
         self.topic = topic
 
     def consume_and_upload(self,account_name,sas_token,batch_size,container):
         #Connecting to ADLS with the purpose of storing data in a data lake.
         adls = ADLS_Connect(account_name,sas_token,container)
         try:
-            currentbatch = [] #will store the messages coming from each poll through kafka
-            polls = 0 #polling counter 
             while True:
                 # Poll for new messages in batches 
-                batch = self.consumer.poll(timeout_ms=1000, max_records=batch_size)
+                batch = self.consumer.poll(timeout_ms= 15000, max_records=batch_size)
 
-                #Getting Topic partition and messages from the batch we polled
-                for tp, messages in batch.items():
-                    print(f" polls - {polls}, current_batch_size {len(currentbatch)} Received message: {messages}")
-                    for message in messages:
-                        #Extracting the value the value out of the message and appending to a list
-                        #Purpose - We want the file to have multiple records based on the batch size
-                        currentbatch.append(message.value)
+                if batch is None:
+                    continue
+                #if batch.error():
+                    #log the error in a file - need to work on this
+                    #print("We got an error")
+                else:
 
-                #Since we are storing the messages in a list and waiting to hit the batch_size, there could be chance where
-                # there are no records coming in the next poll, in that case add condition to retry for 2 polls else create file
-                # with the exisiting records present in currentbatch list        
-                if((len(currentbatch) > batch_size or polls > 2) and len(currentbatch) > 0):
+                    currentbatch = [] #will store the messages coming from each poll through kafka
+                    
+                    #Getting Topic partition and messages from the batch we polled
+                    for tp, messages in batch.items():
+                        print(f"current_batch_size {len(currentbatch)} Received message: {messages}")
+                        for message in messages:
+                            #Extracting the value the value out of the message and appending to a list
+                            #Purpose - We want the file to have multiple records based on the batch size
+                            currentbatch.append(message.value)
+
+
                     directory_client = adls.get_directory(self.topic)
 
                     #file name is generated based on the time its been created
@@ -51,14 +60,6 @@ class Kafka_Consumer:
                     #appending the saving the file
                     file_client.append_data(records, offset=filesize_previous, length=len(records))
                     file_client.flush_data(filesize_previous+len(records))
-                    
-                    #once the above conditions meet, start with the new batch
-                    currentbatch = []
-                    polls = 0
-
-                #incrmented the polling counter
-                polls += 1
-                time.sleep(15)
 
         except KeyboardInterrupt:
             print("Stopping the consumer...")

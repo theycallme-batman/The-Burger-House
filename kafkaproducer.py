@@ -1,3 +1,4 @@
+import random
 from kafka import KafkaProducer
 from json import dumps,loads
 from createdata import OrderDataGenerator
@@ -12,6 +13,7 @@ class Kafka_Producer:
         #Initialiaze the Data Generator object
         self.order_data_generator = OrderDataGenerator(country)
         
+        
     def generateRecords(self,num_orders):     
         #Get the initial item data information from the ./initdata 
         maxItemID, itemDict = self.order_data_generator.readItems()
@@ -22,6 +24,7 @@ class Kafka_Producer:
         #Get DataFrames for orders and order items
         self.orders_df = self.order_data_generator.get_orders_dataframe()
         self.order_items_df = self.order_data_generator.get_order_items_dataframe()
+
         
     def connect_as_producer(self,bootstrap_servers):
         #Connecting to Kafka as a producer with the server and serializer details
@@ -40,8 +43,7 @@ class Kafka_Producer:
             #Send data to Kafka
             self.producer.send('orders',value = row_json)
 
-            #Sleep used to give time between sending each record
-            time.sleep(5)
+            
         
     def send_records_items(self): 
         
@@ -56,6 +58,5 @@ class Kafka_Producer:
             #Send data to Kafka
             self.producer.send('orderitems',value = row_json)
 
-            #Sleep used to give time between sending each record
-            time.sleep(5)
+            
         
