@@ -46,20 +46,20 @@ class Kafka_Consumer:
                             currentbatch.append(message.value)
 
 
-                    directory_client = adls.get_directory(self.topic)
+                    # directory_client = adls.get_directory(self.topic)
 
-                    #file name is generated based on the time its been created
-                    myfile = 'part-'+hashlib.sha256(str(time.time()).encode('utf-8')).hexdigest()[:15]+'.json'
-                    file_client = directory_client.create_file(myfile)
+                    # #file name is generated based on the time its been created
+                    # myfile = 'part-'+hashlib.sha256(str(time.time()).encode('utf-8')).hexdigest()[:15]+'.json'
+                    # file_client = directory_client.create_file(myfile)
 
-                    #formatting the records
-                    records = "\n".join(currentbatch)
+                    # #formatting the records
+                    # records = "\n".join(currentbatch)
 
-                    filesize_previous = file_client.get_file_properties().size
+                    # filesize_previous = file_client.get_file_properties().size
 
-                    #appending the saving the file
-                    file_client.append_data(records, offset=filesize_previous, length=len(records))
-                    file_client.flush_data(filesize_previous+len(records))
+                    # #appending the saving the file
+                    # file_client.append_data(records, offset=filesize_previous, length=len(records))
+                    # file_client.flush_data(filesize_previous+len(records))
 
         except KeyboardInterrupt:
             print("Stopping the consumer...")
