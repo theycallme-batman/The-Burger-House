@@ -6,7 +6,8 @@ This project is designed to handle and process data for a global burger chain wi
 
 ## Architecture
 
-![Architecture](image.png)
+![image](https://github.com/user-attachments/assets/94ade5b9-3d21-458f-9e42-2d93b2da2b85)
+
 
 The project's architecture includes the following key components:
 
@@ -25,7 +26,7 @@ The project's architecture includes the following key components:
 
 4. **Data Storage**:
     - **Azure Data Lake Storage (ADLS)**: Stores raw data received directly from Databricks, providing scalable and cost-effective storage.
-    - **SQL Server**: Acts as the destination for processed and transformed data. This is the primary source for analytical reporting and dashboard creation.
+    - **Snowflake**: Acts as the destination for processed and transformed data. This is the primary source for analytical reporting and dashboard creation.
 
 5. **Data Visualization**:
     - A dashboard is created using data from the destination SQL Server to visualize key business metrics, such as sales performance, order volume, and customer preferences across different regions.
@@ -35,7 +36,7 @@ The project's architecture includes the following key components:
 - **Apache Kafka**: For real-time data streaming.
 - **Databricks**: For data processing, transformation, and integration.
 - **Azure Data Lake Storage (ADLS)**: For storing raw data.
-- **SQL Server**: For storing transformed data and acting as a data source for the dashboard.
+- **Snowflake**: For storing transformed data in a data warehouse and acting as a data source for the dashboard.
 - **Azure Data Factory (ADF)**: For orchestrating data transformations and ETL processes.
 - **Dashboard Tool**: Used for creating visual reports and insights (e.g., Power BI).
 
@@ -44,7 +45,7 @@ The project's architecture includes the following key components:
 1. **Kafka Setup**: Configure Kafka to stream data from the order management systems in each of the stores.
 2. **Databricks Configuration**: Set up Databricks workspaces, clusters, and notebooks to process the incoming Kafka streams.
 3. **ADLS Setup**: Create containers and set appropriate access permissions for Databricks to store raw data.
-4. **SQL Server Setup**: Configure databases and tables for storing transformed data.
+4. **Snowflake Setup**: Configure databases and tables for storing transformed data.
 5. **ADF Pipelines**: Create ADF pipelines to handle data transformation from the initial SQL Server to the destination SQL Server.
 6. **Dashboard Creation**: Connect the dashboard tool to the destination SQL Server and create visualizations for real-time data insights.
 
