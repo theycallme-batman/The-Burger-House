@@ -1,0 +1,12 @@
+[{
+  "kafka.boostrapservers" : []
+  ,"kafka.group.id": "2"
+  ,"kafka.topics" : "order*"
+  ,"tables": ["orders","orderitems"]
+  ,"bronze.checkpointlocation" : "{location}/checkpoints/bronze/"
+  ,"silver.checkpointlocation" : "{location}/checkpoints/silver/"
+  ,"sfUrl": "https://my19692.central-india.azure.snowflakecomputing.com"
+  ,"sfDatabase": "Landing"
+  ,"sfSchema": "dbo"
+  ,"sfWarehouse": "COMPUTE_WH"
+}]
