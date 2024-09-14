@@ -1,8 +1,6 @@
 from kafka import KafkaConsumer
-from json import dumps,loads
-import hashlib
-import time
-from adls import ADLS_Connect
+from json import loads
+from Connectors.ADLS.adls import ADLS_Connect
 
 """
 Class - Kafka_Consumer

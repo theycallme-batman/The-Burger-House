@@ -1,8 +1,6 @@
-import random
 from kafka import KafkaProducer
-from json import dumps,loads
-from createdata import OrderDataGenerator
-import time
+from json import dumps
+from Generator.createdata import OrderDataGenerator
 
 """
 Class - Kafka_Producer

@@ -87,7 +87,7 @@ class OrderDataGenerator:
 
     def readItems(self):
         #Reads file for initdata and returning the same.
-        df = pd.read_csv('./initdata/Items.csv')
+        df = pd.read_csv('../../initdata/Items.csv')
         maxItemID = df["Id"].max()
         itemDict = df.set_index('Id').T.to_dict()
         return maxItemID,itemDict
